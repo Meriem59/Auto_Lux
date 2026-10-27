@@ -14,7 +14,7 @@ button{font:inherit;cursor:pointer}
 
 /* langue */
 .lang{position:relative}
-#langBtn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--blanc);border:2px solid var(--blanc);border-radius:50%}
+#langBtn{flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--blanc);border:2px solid var(--blanc);border-radius:50%}
 #langBtn:hover{border-color:var(--rouge);color:var(--rouge)}
 .menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-width:150px;background:var(--gris);border:2px solid var(--rouge);border-radius:10px;overflow:hidden;z-index:50}
 .menu[hidden]{display:none}
@@ -22,12 +22,12 @@ button{font:inherit;cursor:pointer}
 .menu button:hover,.menu button.on{background:var(--rouge)}
 
 /* en-tête */
-header{position:sticky;top:0;z-index:20;background:var(--noir);border-bottom:2px solid var(--rouge);display:flex;align-items:center;gap:16px;padding:8px 20px;flex-wrap:wrap}
-header img{height:64px;width:auto;object-fit:contain;border-radius:6px}
-.search{flex:1;min-width:200px}
+header{position:sticky;top:0;z-index:20;background:var(--noir);border-bottom:2px solid var(--rouge);display:flex;align-items:center;gap:16px;padding:8px 20px;flex-wrap:nowrap}
+header img{height:64px;width:auto;object-fit:contain;border-radius:6px;flex-shrink:0}
+.search{flex:1;min-width:0}
 .search input{width:100%;padding:11px 16px;border-radius:30px;border:2px solid var(--gris2);background:var(--gris);color:var(--blanc);font-size:1rem}
 .search input:focus{outline:none;border-color:var(--rouge)}
-#cartBtn{background:var(--rouge);color:var(--blanc);border:0;border-radius:30px;padding:11px 20px;font-weight:bold}
+#cartBtn{background:var(--rouge);color:var(--blanc);border:0;border-radius:30px;padding:11px 20px;font-weight:bold;white-space:nowrap;flex-shrink:0}
 #cartBtn:hover{background:#c40f19}
 
 /* hero */
@@ -68,6 +68,15 @@ main{max-width:1200px;margin:0 auto;padding:0 20px 60px}
 #fond{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:30;display:none}
 #fond.open{display:block}
 footer{text-align:center;color:var(--txt);padding:24px;border-top:2px solid var(--rouge)}
+@media(max-width:600px){
+  header{gap:8px;padding:8px 10px}
+  header img{height:34px}
+  .search input{padding:9px 12px;font-size:.9rem}
+  #langBtn{width:38px;height:38px}
+  #langBtn svg{width:20px;height:20px}
+  #cartBtn{padding:9px 12px}
+  #cartBtn [data-t]{display:none}
+}
 @media(prefers-reduced-motion:reduce){#panier{transition:none}}
 </style>
 </head>
@@ -103,8 +112,7 @@ footer{text-align:center;color:var(--txt);padding:24px;border-top:2px solid var(
     <div class="total"><span data-t="total">Total</span><span id="total">0 DH</span></div>
     <input id="nom" data-p="nom" placeholder="Votre nom">
     <input id="tel" data-p="tel" type="tel" placeholder="Votre téléphone">
-    <input id="ville" data-p="ville" placeholder="Votre ville">
-    <input id="adresse" data-p="adresse" placeholder="Votre adresse complète">
+    <input id="adresse" data-p="adresse" placeholder="Votre ville et adresse complète">
     <button class="cmd" id="cmd" data-t="cmd">Commander sur WhatsApp</button>
   </div>
 </aside>
@@ -189,8 +197,8 @@ const P = [
 ];
 // ========================
 const T={
- fr:{panier:"Panier",mypanier:"Mon panier",hero:"Pièces moto de qualité pour toutes les marques",search:"Rechercher une pièce par nom...",subtotal:"Sous-total",livr:"Frais de livraison",total:"Total",nom:"Votre nom",tel:"Votre téléphone",ville:"Votre ville",adresse:"Votre adresse complète",cmd:"Commander sur WhatsApp",foot:"© Auto lux - Tous droits réservés",order:"Commander",remove:"Supprimer",noitem:"Aucun article trouvé.",emptycart:"Votre panier est vide.",needinfo:"Entrez votre nom, téléphone, ville et adresse.",dh:"DH"},
- ar:{panier:"السلة",mypanier:"سلتي",hero:"قطع غيار الدراجات النارية بجودة عالية لجميع الماركات",search:"ابحث عن قطعة بالاسم...",subtotal:"المجموع الفرعي",livr:"مصاريف التوصيل",total:"المجموع",nom:"اسمك",tel:"رقم هاتفك",ville:"مدينتك",adresse:"عنوانك الكامل",cmd:"اطلب عبر واتساب",foot:"© أوطو لوكس - جميع الحقوق محفوظة",order:"اطلب",remove:"حذف",noitem:"لا توجد منتجات.",emptycart:"سلتك فارغة.",needinfo:"المرجو إدخال الاسم والهاتف والمدينة والعنوان.",dh:"درهم"}
+ fr:{panier:"Panier",mypanier:"Mon panier",hero:"Pièces moto de qualité pour toutes les marques",search:"Rechercher une pièce par nom...",subtotal:"Sous-total",livr:"Frais de livraison",total:"Total",nom:"Votre nom",tel:"Votre téléphone",adresse:"Votre ville et adresse complète",cmd:"Commander sur WhatsApp",foot:"© Auto lux - Tous droits réservés",order:"Commander",remove:"Supprimer",noitem:"Aucun article trouvé.",emptycart:"Votre panier est vide.",needinfo:"Entrez votre nom, téléphone, ville et adresse.",dh:"DH"},
+ ar:{panier:"السلة",mypanier:"سلتي",hero:"قطع غيار الدراجات النارية بجودة عالية لجميع الماركات",search:"ابحث عن قطعة بالاسم...",subtotal:"المجموع الفرعي",livr:"مصاريف التوصيل",total:"المجموع",nom:"اسمك",tel:"رقم هاتفك",adresse:"مدينتك وعنوانك الكامل",cmd:"اطلب عبر واتساب",foot:"© أوطو لوكس - جميع الحقوق محفوظة",order:"اطلب",remove:"حذف",noitem:"لا توجد منتجات.",emptycart:"سلتك فارغة.",needinfo:"المرجو إدخال الاسم والهاتف والمدينة والعنوان.",dh:"درهم"}
 };
 
 
@@ -253,13 +261,12 @@ $("cmd").onclick=()=>{
   if(!ids.length)return alert(t("emptycart"));
   const nom=$("nom").value.trim(),
         tel=$("tel").value.trim(),
-        ville=$("ville").value.trim(),
         adresse=$("adresse").value.trim();
-  if(!nom||!tel||!ville||!adresse)return alert(t("needinfo"));
+  if(!nom||!tel||!adresse)return alert(t("needinfo"));
   let m="Nouvelle commande Auto lux\n";
   ids.forEach(i=>m+=`- ${P[i][0]} x${cart[i]} = ${P[i][1]*cart[i]} DH\n`);
   m+=`Sous-total: ${sous} DH\nLivraison: ${LIVRAISON} DH\nTotal: ${tot} DH\n`;
-  m+=`Nom: ${nom}\nTel: ${tel}\nVille: ${ville}\nAdresse: ${adresse}`;
+  m+=`Nom: ${nom}\nTel: ${tel}\nVille/Adresse: ${adresse}`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`,"_blank");
 };
 applyLang();
