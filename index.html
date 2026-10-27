@@ -101,7 +101,9 @@ footer{text-align:center;color:var(--txt);padding:24px;border-top:2px solid var(
     <div class="ligne"><span data-t="livr">Frais de livraison</span><span id="liv">0 DH</span></div>
     <div class="total"><span data-t="total">Total</span><span id="total">0 DH</span></div>
     <input id="nom" data-p="nom" placeholder="Votre nom">
-    <input id="tel" data-p="tel" placeholder="Votre téléphone">
+    <input id="tel" data-p="tel" type="tel" placeholder="Votre téléphone">
+    <input id="ville" data-p="ville" placeholder="Votre ville">
+    <input id="adresse" data-p="adresse" placeholder="Votre adresse complète">
     <button class="cmd" id="cmd" data-t="cmd">Commander sur WhatsApp</button>
   </div>
 </aside>
@@ -110,7 +112,7 @@ footer{text-align:center;color:var(--txt);padding:24px;border-top:2px solid var(
 
 <script>
 // ====== A MODIFIER ======
-const WHATSAPP = "212707060214"; // numéro WhatsApp
+const WHATSAPP = "2120633605758"; // numéro WhatsApp
 const LIVRAISON = 35; // frais de livraison (DH)
 let sous = 0, tot = 0;
 // Chaque article : [nom, prix (DH), chemin de l'image]
@@ -161,7 +163,7 @@ const P = [
  ["acoudoiar colis standard ",150,"images/im41.jpeg"],
  ["caldo dos",80,"images/im42.jpeg"],
  ["tapis 7D",399,"images/im43.jpeg"],
- ["Coverw cossin tissu avant","350","images/im44.jpeg"],
+ ["Coverw cossin tissu avant",350,"images/im44.jpeg"],
  ["Les logos jantes aluminyoume",50,"images/im45.jpeg"],
  ["Coverw cossin tissu avant",350,"images/im46.jpeg"],
  ["Silicon pour siéger avant",180,"images/im47.jpeg"],
@@ -186,8 +188,8 @@ const P = [
 ];
 // ========================
 const T={
- fr:{panier:"Panier",mypanier:"Mon panier",hero:"Pièces moto de qualité pour toutes les marques",search:"Rechercher une pièce par nom...",subtotal:"Sous-total",livr:"Frais de livraison",total:"Total",nom:"Votre nom",tel:"Votre téléphone",cmd:"Commander sur WhatsApp",foot:"© Auto lux - Tous droits réservés",order:"Commander",remove:"Supprimer",noitem:"Aucun article trouvé.",emptycart:"Votre panier est vide.",needinfo:"Entrez votre nom et téléphone.",dh:"DH"},
- ar:{panier:"السلة",mypanier:"سلتي",hero:"قطع غيار الدراجات النارية بجودة عالية لجميع الماركات",search:"ابحث عن قطعة بالاسم...",subtotal:"المجموع الفرعي",livr:"مصاريف التوصيل",total:"المجموع",nom:"اسمك",tel:"رقم هاتفك",cmd:"اطلب عبر واتساب",foot:"© أوطو لوكس - جميع الحقوق محفوظة",order:"اطلب",remove:"حذف",noitem:"لا توجد منتجات.",emptycart:"سلتك فارغة.",needinfo:"المرجو إدخال اسمك ورقم هاتفك.",dh:"درهم"}
+ fr:{panier:"Panier",mypanier:"Mon panier",hero:"Pièces moto de qualité pour toutes les marques",search:"Rechercher une pièce par nom...",subtotal:"Sous-total",livr:"Frais de livraison",total:"Total",nom:"Votre nom",tel:"Votre téléphone",ville:"Votre ville",adresse:"Votre adresse complète",cmd:"Commander sur WhatsApp",foot:"© Auto lux - Tous droits réservés",order:"Commander",remove:"Supprimer",noitem:"Aucun article trouvé.",emptycart:"Votre panier est vide.",needinfo:"Entrez votre nom, téléphone, ville et adresse.",dh:"DH"},
+ ar:{panier:"السلة",mypanier:"سلتي",hero:"قطع غيار الدراجات النارية بجودة عالية لجميع الماركات",search:"ابحث عن قطعة بالاسم...",subtotal:"المجموع الفرعي",livr:"مصاريف التوصيل",total:"المجموع",nom:"اسمك",tel:"رقم هاتفك",ville:"مدينتك",adresse:"عنوانك الكامل",cmd:"اطلب عبر واتساب",foot:"© أوطو لوكس - جميع الحقوق محفوظة",order:"اطلب",remove:"حذف",noitem:"لا توجد منتجات.",emptycart:"سلتك فارغة.",needinfo:"المرجو إدخال الاسم والهاتف والمدينة والعنوان.",dh:"درهم"}
 };
 
 // <<< 7ett LOGO dyalek hna (nafs ster l9dim dial const LOGO = "data:image/jpeg;base64,...")
@@ -251,11 +253,16 @@ $("close").onclick=$("fond").onclick=()=>openCart(false);
 $("cmd").onclick=()=>{
   const ids=Object.keys(cart);
   if(!ids.length)return alert(t("emptycart"));
-  if(!$("nom").value||!$("tel").value)return alert(t("needinfo"));
-  let m="Nouvelle commande Auto lux%0A";
-  ids.forEach(i=>m+=`- ${P[i][0]} x${cart[i]} = ${P[i][1]*cart[i]} DH%0A`);
-  m+=`Sous-total: ${sous} DH%0ALivraison: ${LIVRAISON} DH%0ATotal: ${tot} DH%0ANom: ${encodeURIComponent($("nom").value)}%0ATel: ${encodeURIComponent($("tel").value)}`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${m}`,"_blank");
+  const nom=$("nom").value.trim(),
+        tel=$("tel").value.trim(),
+        ville=$("ville").value.trim(),
+        adresse=$("adresse").value.trim();
+  if(!nom||!tel||!ville||!adresse)return alert(t("needinfo"));
+  let m="Nouvelle commande Auto lux\n";
+  ids.forEach(i=>m+=`- ${P[i][0]} x${cart[i]} = ${P[i][1]*cart[i]} DH\n`);
+  m+=`Sous-total: ${sous} DH\nLivraison: ${LIVRAISON} DH\nTotal: ${tot} DH\n`;
+  m+=`Nom: ${nom}\nTel: ${tel}\nVille: ${ville}\nAdresse: ${adresse}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`,"_blank");
 };
 applyLang();
 </script>
